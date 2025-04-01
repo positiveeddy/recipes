@@ -1,6 +1,6 @@
 // app.js - Milk Depot Recipes Application Logic
 
-// *** FIX: Wrap ALL code that interacts with the DOM in DOMContentLoaded ***
+// *** FIX: Wrap ALL DOM manipulation code in DOMContentLoaded listener ***
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded and parsed. Initializing app...");
 
@@ -15,35 +15,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const flavoringsListEl = document.getElementById('recipeFlavorings');
     const descriptionEl = document.getElementById('recipeDescription');
     const nutritionTableBodyEl = document.getElementById('nutritionTable')?.querySelector('tbody');
-    const flavoringsParagraphEl = document.getElementById('flavoringsIntro');
+    const flavoringsParagraphEl = document.getElementById('flavoringsIntro'); // Use the specific ID
 
-    // --- Check if all essential elements were found ---
-    const essentialElements = [
+    // --- Robust Check if all essential elements were found ---
+    const essentialElements = { // Use an object for clearer error messages
         recipeListScreenEl, recipeDetailScreenEl, recipeListEl, homeButton,
-        recipeNameEl, ingredientsListEl, flavoringsListEl, descriptionEl,
-        nutritionTableBodyEl, flavoringsParagraphEl
-    ];
-    if (essentialElements.some(el => !el)) { // Check if any element is null
-        console.error("CRITICAL ERROR: One or more essential HTML elements not found! Check IDs in index.html. App cannot start.");
-        // Display error to user on the list page if possible
-         const listElement = document.getElementById('recipeList'); // Try getting it again
-         if(listElement) { listElement.innerHTML = '<li class="loading-placeholder">Error: App HTML structure mismatch.</li>'; }
-        return; // Stop initialization
+        recipeNameEl, ingredientsListEl, flavoringsListEl, flavoringsParagraphEl,
+        descriptionEl, nutritionTableBodyEl
+    };
+    let allElementsFound = true;
+    for (const [key, el] of Object.entries(essentialElements)) {
+        if (!el) {
+            console.error(`CRITICAL ERROR: HTML element for '${key}' not found! Check ID in index.html.`);
+            allElementsFound = false;
+        }
+    }
+
+    // Stop initialization if essential elements are missing
+    if (!allElementsFound) {
+         const listElement = document.getElementById('recipeList'); // Try getting it again for error display
+         if(listElement) { listElement.innerHTML = '<li class="loading-placeholder">Error: App structure mismatch.</li>'; }
+        return;
     } else {
          console.log("All essential elements successfully found.");
     }
+
 
     // --- Event Listeners ---
     // Now safe to add listeners as elements are confirmed to exist
     homeButton.addEventListener('click', showRecipeListScreen);
 
-    // --- Core Functions --- (Defined inside DOMContentLoaded or globally accessible)
+    // --- Core Functions ---
 
     /**
      * Clears and populates the recipe list screen.
      */
     function displayRecipeList() {
-        // recipeListEl is guaranteed to exist here because of the check above
         recipeListEl.innerHTML = ''; // Clear placeholder
 
         // Check recipes data availability
@@ -70,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} recipeId - The unique ID of the recipe.
      */
     function showRecipeDetailScreen(recipeId) {
-        // Elements needed for this function are already checked/guaranteed by the initial check
         const recipe = recipes.find(r => r.id === recipeId);
         if (!recipe) { console.error("Recipe not found for ID:", recipeId); return; }
 
@@ -115,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
      * Hides the detail screen and shows the recipe list screen.
      */
     function showRecipeListScreen() {
-        // Elements guaranteed to exist by initial check
         recipeDetailScreenEl.classList.add('hidden');
         recipeListScreenEl.classList.remove('hidden');
     }
