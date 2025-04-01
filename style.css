@@ -1,239 +1,35 @@
 /* General Styles */
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
-    color: #333;
-    line-height: 1.5;
-}
-
-#appContainer {
-    max-width: 750px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
-}
-
+body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; background-color: #f8f8f8; color: #333; line-height: 1.5; }
+#appContainer { max-width: 750px; margin: 20px auto; background-color: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e0e0e0; }
 /* Header */
-#appHeader {
-    text-align: center;
-    margin-bottom: 25px;
-    padding-bottom: 20px;
-    border-bottom: 3px solid #4CAF50; /* Milk Depot Green */
-}
-
-#appHeader h1 {
-    color: #4CAF50;
-    margin-bottom: 5px;
-    font-size: 2.2em;
-}
-
-#appHeader .tagline {
-    color: #555;
-    font-style: italic;
-    font-size: 1em;
-}
-
+#appHeader { text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 3px solid #4CAF50; }
+#appHeader h1 { color: #4CAF50; margin-bottom: 5px; font-size: 2.2em; }
+#appHeader .tagline { color: #555; font-style: italic; font-size: 1em; }
 /* Recipe List Screen */
-#recipeListScreen h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.list-container {
-    max-height: 75vh; /* Adjust height as needed */
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff; /* Ensure background */
-}
-
-#recipeList {
-    list-style: none;
-    padding: 0;
-    margin: 0; /* Remove default margin */
-}
-
-#recipeList li {
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    font-size: 1.1em;
-}
-
-#recipeList li:last-child {
-    border-bottom: none;
-}
-
-#recipeList li:hover {
-    background-color: #e8f5e9; /* Lighter green hover */
-    color: #2e7d32;
-}
-
-.loading-placeholder {
-    padding: 20px;
-    text-align: center;
-    color: #888;
-    font-style: italic;
-}
-
-
+#recipeListScreen h2 { text-align: center; color: #333; margin-bottom: 20px; }
+.list-container { max-height: 75vh; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; background-color: #fff; }
+#recipeList { list-style: none; padding: 0; margin: 0; }
+#recipeList li { padding: 15px 20px; border-bottom: 1px solid #eee; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; font-size: 1.1em; }
+#recipeList li:last-child { border-bottom: none; }
+#recipeList li:hover { background-color: #e8f5e9; color: #2e7d32; }
+.loading-placeholder { padding: 20px; text-align: center; color: #888; font-style: italic; }
 /* Recipe Detail Screen */
-.hidden {
-    display: none;
-}
-
-#homeButton {
-    display: inline-block; /* Allow alignment */
-    margin-bottom: 25px;
-    padding: 10px 18px;
-    background-color: #5cb85c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-}
-
-#homeButton:hover {
-    background-.4, carbs: 4, fiber: 1, sugars: 3, protein: 2, calcium: 70, vitamin_d: 0, iron: 0.3, potassium: 60 }
-    },
-    {
-        id: "almond002",
-        name: "Vanilla Bean Dream Almond",
-        ingredients: ["1 cup Raw Almonds"],
-        flavorings: ["1 tsp Vanilla Bean Paste (or 1 scraped bean)", "2 tsp Monk Fruit Sweetener", "Pinch Sea Salt"],
-        description: "Elevate your almond milk with the intense, aromatic flavor of real vanilla bean. This version uses monk fruit for sweetness without added sugar, making it a delightful treat.\n\nWonderful in lattes, poured over fresh berries, or used as a base for chia seed pudding. The vanilla bean adds a touch of luxury.",
-        nutrition: { calories: 45, fat: 5, saturated_fat: 0.4, carbs: 1, fiber: 1, sugars: 0, protein: 2, calcium: 60, vitamin_d: 0, iron: 0.3, potassium: 60 }
-    },
-    {
-        id: "almond003",
-        name: "Honey Kissed Almond",
-        ingredients: ["1 cup Raw Almonds"],
-        flavorings: ["1.5 tbsp Honey", "Pinch Salt"],
-        description: "A gentle sweetness from pure honey makes this almond milk naturally satisfying. It has a warm, comforting flavor that pairs well with many dishes.\n\nTry it warmed with a cinnamon stick for a cozy evening drink, or use it in oatmeal for a touch of sweetness. Also great for children who enjoy a familiar, mild flavor.",
-        nutrition: { calories: 75, fat: 5, saturated_fat: 0.4, carbs: 6, fiber: 1, sugars: 5, protein: 2, calcium: 60, vitamin_d: 0, iron: 0.3, potassium: 65 }
-    },
-     {
-        id: "almond004",
-        name: "Chocolate Delight Almond",
-        ingredients: ["1 cup Raw Almonds"],
-        flavorings: ["2 tbsp Cocoa Powder (unsweetened)", "1.5 tbsp Maple Syrup", "1/4 tsp Vanilla Extract", "Pinch Salt"],
-        description: "A healthy indulgence! Rich cocoa powder transforms simple almond milk into a delicious chocolate treat. Perfectly balanced sweetness makes it satisfying without being overly sugary.\n\nAmazing on its own, blended with a banana for a quick smoothie, or gently heated for a comforting hot cocoa alternative. A hit with kids and adults alike!",
-        nutrition: { calories: 85, fat: 5.5, saturated_fat: 0.6, carbs: 7, fiber: 2, sugars: 3.5, protein: 2.5, calcium: 65, vitamin_d: 0, iron: 0.8, potassium: 120 }
-    },
-    // --- CASHEW ---
-    {
-        id: "cashew001",
-        name: "Silky Smooth Cashew",
-        ingredients: ["1 cup Raw Cashews (soaking optional)"],
-        flavorings: ["1 tbsp Agave Nectar", "1/2 tsp Vanilla Extract", "Pinch Salt"],
-        description: "Experience the incredibly creamy, naturally rich texture of cashew milk. Soaking the cashews results in a silky smooth milk that's pure bliss. Agave provides a clean sweetness.\n\nExcellent for creamy soups, sauces, vegan mac 'n' cheese bases, or simply enjoyed by the glass. Its neutral flavor makes it highly adaptable.",
-        color: #4a9c4a;
-}
-
-#recipeDetailScreen h2 {
-    text-align: center;
-    color: #4CAF50;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-}
-
-.recipe-section {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px dashed #ccc;
-}
-
-.recipe-section:last-of-type { /* Last section doesn't need bottom border */
-     border-bottom: none;
-     padding-bottom: 0;
-     margin-bottom: 0;
-}
-
-.recipe-section h3 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.4em;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 5px;
-}
-.recipe-section h4 {
-    color: #555;
-    margin-top: 15px;
-    margin-bottom: 8px;
-    font-size: 1.1em;
-    font-weight: bold;
-}
-
-#recipeIngredients,
-#recipeFlavorings,
-#recipeSteps {
-    margin-left: 5px;
-    padding-left: 25px; /* Consistent indent */
-}
-
-#recipeIngredients li,
-#recipeFlavorings li,
-#recipeSteps li {
-    margin-bottom: 8px;
-    line-height: 1.4;
-}
-
-#recipeDescription {
-    line-height: 1.7;
-    text-align: left; /* Justify can look odd sometimes */
-    color: #444;
-}
-
+.hidden { display: none; }
+#homeButton { display: inline-block; margin-bottom: 25px; padding: 10px 18px; background-color: #5cb85c; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; font-weight: bold; transition: background-color 0.2s ease; }
+#homeButton:hover { background-color: #4a9c4a; }
+#recipeDetailScreen h2 { text-align: center; color: #4CAF50; margin-bottom: 25px; font-size: 1.8em; }
+.recipe-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
+.recipe-section:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.recipe-section h3 { color: #333; margin-bottom: 15px; font-size: 1.4em; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+.recipe-section h4 { color: #555; margin-top: 15px; margin-bottom: 8px; font-size: 1.1em; font-weight: bold; }
+#recipeIngredients, #recipeFlavorings, #recipeSteps { margin-left: 5px; padding-left: 25px; }
+#recipeIngredients li, #recipeFlavorings li, #recipeSteps li { margin-bottom: 8px; line-height: 1.4; }
+#recipeDescription { line-height: 1.7; text-align: left; color: #444; }
 /* Nutrition Table */
-#nutritionTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    font-size: 0.95em;
-}
-
-#nutritionTable th,
-#nutritionTable td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-#nutritionTable th {
-    background-color: #f7f7f7;
-    font-weight: bold;
-    width: 40%; /* Give nutrient name more space */
-}
-
-#nutritionTable tbody tr:nth-child(odd) {
-    background-color: #fdfdfd;
-}
-
-.disclaimer {
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 15px;
-    text-align: center;
-    font-style: italic;
-    padding: 0 10px;
-}
-
+#nutritionTable { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; }
+#nutritionTable th, #nutritionTable td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+#nutritionTable th { background-color: #f7f7f7; font-weight: bold; width: 40%; }
+#nutritionTable tbody tr:nth-child(odd) { background-color: #fdfdfd; }
+.disclaimer { font-size: 0.85em; color: #666; margin-top: 15px; text-align: center; font-style: italic; padding: 0 10px; }
 /* Footer */
-#appFooter {
-    text-align: center;
-    margin-top: 30px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-    font-size: 0.9em;
-    color: #888;
-}
+#appFooter { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.9em; color: #888; }
