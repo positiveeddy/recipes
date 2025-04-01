@@ -1,14 +1,13 @@
 // app.js - Milk Depot Recipes Application Logic
 
-// *** FIX: Wrap ALL DOM manipulation code in DOMContentLoaded listener ***
+// *** FIX: Wrap ALL code that interacts with the DOM in DOMContentLoaded ***
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM fully loaded and parsed"); // Log when DOM is ready
+    console.log("DOM fully loaded and parsed. Initializing app...");
 
-    // Get references to major screen elements
+    // --- Get Element References ---
+    // Do this *inside* the listener to ensure elements exist
     const recipeListScreenEl = document.getElementById('recipeListScreen');
     const recipeDetailScreenEl = document.getElementById('recipeDetailScreen');
-
-    // Get references to interactive/dynamic elements
     const recipeListEl = document.getElementById('recipeList');
     const homeButton = document.getElementById('homeButton');
     const recipeNameEl = document.getElementById('recipeName');
@@ -16,35 +15,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const flavoringsListEl = document.getElementById('recipeFlavorings');
     const descriptionEl = document.getElementById('recipeDescription');
     const nutritionTableBodyEl = document.getElementById('nutritionTable')?.querySelector('tbody');
-    // Get the paragraph before flavorings using its new ID
-    const flavoringsParagraphEl = document.getElementById('flavoringsIntro'); // <<< Use ID here
+    const flavoringsParagraphEl = document.getElementById('flavoringsIntro');
 
-
-    // Check if all essential elements were found NOW that DOM is ready
-    if (!recipeListScreenEl || !recipeDetailScreenEl || !recipeListEl || !homeButton || !recipeNameEl || !ingredientsListEl || !flavoringsListEl || !descriptionEl || !nutritionTableBodyEl || !flavoringsParagraphEl) {
-        console.error("CRITICAL ERROR: One or more essential HTML elements not found AFTER DOMContentLoaded! Check IDs in index.html.");
-        if(recipeListEl) { recipeListEl.innerHTML = '<li class="loading-placeholder">Error: App elements missing.</li>'; }
+    // --- Check if all essential elements were found ---
+    const essentialElements = [
+        recipeListScreenEl, recipeDetailScreenEl, recipeListEl, homeButton,
+        recipeNameEl, ingredientsListEl, flavoringsListEl, descriptionEl,
+        nutritionTableBodyEl, flavoringsParagraphEl
+    ];
+    if (essentialElements.some(el => !el)) { // Check if any element is null
+        console.error("CRITICAL ERROR: One or more essential HTML elements not found! Check IDs in index.html. App cannot start.");
+        // Display error to user on the list page if possible
+         const listElement = document.getElementById('recipeList'); // Try getting it again
+         if(listElement) { listElement.innerHTML = '<li class="loading-placeholder">Error: App HTML structure mismatch.</li>'; }
         return; // Stop initialization
     } else {
-         console.log("All essential elements found.");
+         console.log("All essential elements successfully found.");
     }
 
-
     // --- Event Listeners ---
-    homeButton.addEventListener('click', showRecipeListScreen); // Add listener now elements exist
+    // Now safe to add listeners as elements are confirmed to exist
+    homeButton.addEventListener('click', showRecipeListScreen);
 
     // --- Core Functions --- (Defined inside DOMContentLoaded or globally accessible)
 
     /**
-     * Clears and populates the recipe list screen from the global 'recipes' array.
+     * Clears and populates the recipe list screen.
      */
     function displayRecipeList() {
-        if (!recipeListEl) return; // Guard
+        // recipeListEl is guaranteed to exist here because of the check above
         recipeListEl.innerHTML = ''; // Clear placeholder
 
+        // Check recipes data availability
         if (typeof recipes === 'undefined' || !Array.isArray(recipes) || recipes.length === 0) {
              recipeListEl.innerHTML = '<li class="loading-placeholder">Error: Recipes data not available.</li>';
-             console.error("Recipes array missing or empty within displayRecipeList!");
+             console.error("Recipes array missing or empty!");
              return;
         }
 
@@ -65,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} recipeId - The unique ID of the recipe.
      */
     function showRecipeDetailScreen(recipeId) {
+        // Elements needed for this function are already checked/guaranteed by the initial check
         const recipe = recipes.find(r => r.id === recipeId);
         if (!recipe) { console.error("Recipe not found for ID:", recipeId); return; }
 
@@ -78,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Populate Flavorings
         flavoringsListEl.innerHTML = '';
         if (recipe.flavorings && recipe.flavorings.length > 0) {
-             flavoringsListEl.style.display = 'block'; flavoringsParagraphEl.style.display = 'block'; // Use the variable found earlier
+             flavoringsListEl.style.display = 'block'; flavoringsParagraphEl.style.display = 'block';
              recipe.flavorings.forEach(flav => { const li = document.createElement('li'); li.textContent = flav; flavoringsListEl.appendChild(li); });
         } else {
             flavoringsListEl.style.display = 'none'; flavoringsParagraphEl.style.display = 'none';
@@ -109,13 +115,15 @@ document.addEventListener('DOMContentLoaded', () => {
      * Hides the detail screen and shows the recipe list screen.
      */
     function showRecipeListScreen() {
+        // Elements guaranteed to exist by initial check
         recipeDetailScreenEl.classList.add('hidden');
         recipeListScreenEl.classList.remove('hidden');
     }
 
     // --- Initial Call ---
-    // Call displayRecipeList only AFTER DOM is loaded and elements are guaranteed to exist
+    // Call displayRecipeList immediately inside the listener,
+    // it's safe because DOM is ready and elements were checked.
     displayRecipeList();
-    console.log("App initialized and list displayed.");
+    console.log("App initialized and list displayed successfully.");
 
 }); // End of DOMContentLoaded listener
