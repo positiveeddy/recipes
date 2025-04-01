@@ -1,13 +1,16 @@
 // app.js - Milk Depot Recipes Application Logic
 
 /**
- * Main initialization function called explicitly after scripts load.
+ * Main initialization function called explicitly from HTML after scripts load.
+ * @param {Array} recipesData - The array of recipe objects passed from recipes.js.
  */
-function initializeApp() {
-    console.log("Initializing app...");
+function initializeApp(recipesData) { // <<< Accept recipesData as parameter
+    console.log("Initializing app with data...");
 
-    // *** FIX: Get element references *inside* this function ***
-    // Now we know the DOM is ready when this function is called.
+    // Use the passed-in data, not a global variable
+    const recipes = recipesData;
+
+    // Get element references *inside* this function
     const recipeListScreenEl = document.getElementById('recipeListScreen');
     const recipeDetailScreenEl = document.getElementById('recipeDetailScreen');
     const recipeListEl = document.getElementById('recipeList');
@@ -16,25 +19,20 @@ function initializeApp() {
     const ingredientsListEl = document.getElementById('recipeIngredients');
     const flavoringsListEl = document.getElementById('recipeFlavorings');
     const descriptionEl = document.getElementById('recipeDescription');
-    const nutritionTableBodyEl = document.getElementById('nutritionTable')?.querySelector('tbody'); // Added safety check for table
-    // Get reference to the paragraph preceding the flavorings list
-    // Need to be careful this exists and is the correct element in the HTML structure
-    let flavoringsParagraphEl = null;
-    if (flavoringsListEl) { // Check if flavoringsListEl was found
-       flavoringsParagraphEl = flavoringsListEl.previousElementSibling;
-       // Optional: More robust check if needed:
-       // if (flavoringsParagraphEl && flavoringsParagraphEl.tagName !== 'P') {
-       //    console.warn("Element before flavorings list is not a P tag");
-       //    flavoringsParagraphEl = null; // Don't use it if it's not what we expect
-       // }
+    const nutritionTableBodyEl = document.getElementById('nutritionTable')?.querySelector('tbody');
+    let flavoringsParagraphEl = null; // Defined later if element exists
+
+     // Check if essential elements were found AFTER the DOM should be ready
+    if (!recipeListScreenEl || !recipeDetailScreenEl || !recipeListEl || !homeButton || !recipeNameEl || !ingredientsListEl || !flavoringsListEl || !descriptionEl || !nutritionTableBodyEl) {
+        console.error("CRITICAL ERROR: One or more essential HTML elements not found! Check IDs in index.html.");
+        // Try to display error to user
+        const listElement = document.getElementById('recipeList'); // Try getting it again for error display
+        if(listElement) { listElement.innerHTML = '<li class="loading-placeholder">Error: App HTML structure mismatch.</li>'; }
+        return; // Stop initialization
     }
 
-    // Check if essential elements were found
-    if (!recipeListScreenEl || !recipeDetailScreenEl || !recipeListEl || !homeButton || !recipeNameEl || !ingredientsListEl || !flavoringsListEl || !descriptionEl || !nutritionTableBodyEl) {
-        console.error("One or more essential HTML elements not found! Check IDs in index.html and app.js.");
-        if(recipeListEl) recipeListEl.innerHTML = '<li class="loading-placeholder">Error: App structure mismatch.</li>';
-        return; // Stop if critical elements are missing
-    }
+    // Now safe to get the paragraph element
+     flavoringsParagraphEl = flavoringsListEl.previousElementSibling;
 
 
     // --- Event Listeners ---
@@ -48,9 +46,10 @@ function initializeApp() {
     function displayRecipeList() {
         recipeListEl.innerHTML = ''; // Clear placeholder
 
+        // Check if recipes array was passed correctly
         if (typeof recipes === 'undefined' || !Array.isArray(recipes) || recipes.length === 0) {
-             recipeListEl.innerHTML = '<li class="loading-placeholder">Error: Recipes not loaded.</li>';
-             console.error("Recipes array is missing, not an array, or empty!");
+             recipeListEl.innerHTML = '<li class="loading-placeholder">Error: No recipes loaded.</li>';
+             console.error("Recipes array missing or empty within displayRecipeList!");
              return;
         }
 
@@ -71,7 +70,7 @@ function initializeApp() {
      * @param {string} recipeId - The unique ID of the recipe.
      */
     function showRecipeDetailScreen(recipeId) {
-        const recipe = recipes.find(r => r.id === recipeId);
+        const recipe = recipes.find(r => r.id === recipeId); // Use the recipes array available in this scope
         if (!recipe) { console.error("Recipe not found for ID:", recipeId); return; }
 
         recipeNameEl.textContent = recipe.name;
@@ -119,8 +118,7 @@ function initializeApp() {
         recipeListScreenEl.classList.remove('hidden');
     }
 
-    // --- Initial Call ---
-    // Call displayRecipeList to populate the list when the app initializes
-    displayRecipeList();
+    // --- Initial Call within initializeApp ---
+    displayRecipeList(); // Populate the list now that elements and data are ready
 
 } // End of initializeApp function
