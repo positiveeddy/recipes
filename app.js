@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Stop initialization if essential elements are missing
     if (!allElementsFound) {
          const listElement = document.getElementById('recipeList'); // Try getting it again for error display
-         if(listElement) { listElement.innerHTML = '<li class="loading-placeholder">Error: App structure mismatch.</li>'; }
+         if(listElement) { listElement.innerHTML = '<li class="loading-placeholder">Error: App HTML structure mismatch.</li>'; }
         return;
     } else {
          console.log("All essential elements successfully found.");
@@ -45,12 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Now safe to add listeners as elements are confirmed to exist
     homeButton.addEventListener('click', showRecipeListScreen);
 
-    // --- Core Functions ---
+    // --- Core Functions --- (Defined inside DOMContentLoaded or globally accessible)
 
     /**
      * Clears and populates the recipe list screen.
      */
     function displayRecipeList() {
+        if (!recipeListEl) return; // Guard
         recipeListEl.innerHTML = ''; // Clear placeholder
 
         // Check recipes data availability
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} recipeId - The unique ID of the recipe.
      */
     function showRecipeDetailScreen(recipeId) {
+        // Elements needed for this function are already checked/guaranteed by the initial check
         const recipe = recipes.find(r => r.id === recipeId);
         if (!recipe) { console.error("Recipe not found for ID:", recipeId); return; }
 
@@ -90,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Populate Flavorings
         flavoringsListEl.innerHTML = '';
         if (recipe.flavorings && recipe.flavorings.length > 0) {
-             flavoringsListEl.style.display = 'block'; flavoringsParagraphEl.style.display = 'block';
+             flavoringsListEl.style.display = 'block'; flavoringsParagraphEl.style.display = 'block'; // Use the variable found earlier
              recipe.flavorings.forEach(flav => { const li = document.createElement('li'); li.textContent = flav; flavoringsListEl.appendChild(li); });
         } else {
             flavoringsListEl.style.display = 'none'; flavoringsParagraphEl.style.display = 'none';
@@ -121,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Hides the detail screen and shows the recipe list screen.
      */
     function showRecipeListScreen() {
+        // Elements guaranteed to exist by initial check
         recipeDetailScreenEl.classList.add('hidden');
         recipeListScreenEl.classList.remove('hidden');
     }
