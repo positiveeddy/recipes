@@ -28,7 +28,7 @@
 
             <!-- Screen 2: Recipe Details -->
             <div id="recipeDetailScreen" class="hidden">
-                <button id="homeButton">&larr; Back to Recipes</button>
+                <button id="homeButton">← Back to Recipes</button>
                 <h2 id="recipeName">Recipe Name</h2>
 
                 <div class="recipe-section">
@@ -41,140 +41,65 @@
 
                 <div class="recipe-section">
                     <h3>How to Make It (Using Your Milk Depot!)</h3>
-                    <ol id="recipeSteps">
-                        <li>Add <strong>Base Ingredients</strong> (listed above) to the filter basket.</li>
-                        <li>Add <strong>Flavor Boosters</strong> (listed above, if using) to the filter basket.</li>
+                    <ol id="recipeSteps" start="3"> <!-- Start numbering at 3 -->
                         <li>Attach the filter basket securely to the milk maker top.</li>
-                        <li>Fill the pitcher with 1300ml (about 5.-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e0e0e0;
-}
+                        <li>Fill the pitcher with 1300ml (about 5.5 cups) fresh water and place the milk maker top onto the pitcher.</li>
+                        <li>Press the 'Start' button. Go grab a glass!</li>
+                        <li>In about a minute, your fresh, automatically filtered milk is ready! Pour, enjoy immediately, or chill for later (usually lasts 3-5 days).</li>
+                    </ol>
+                </div>
 
-#appHeader h1 {
-    color: #2a7a2a; /* Milk Depot Green */
-}
-
-#recipeListScreen h2,
-#recipeDetailScreen h2 {
-    color: #333;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-#recipeList {
-    list-style: none;
-    padding: 0;
-    max-height: 70vh; /* Allow scrolling */
-    overflow-y: auto; /* Enable vertical scrollbar */
-    border: 1px solid #eee;
-    border-radius: 4px;
-}
-
-#recipeList li {
-    padding: 12px 15px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-#recipeList li:last-child {
-    border-bottom: none;
-}
-
-#recipeList li:hover {
-    background-color: #e9f5e9; /* Light green hover */
-}
-
-.hidden {
-    display: none;
-}
-
-#homeButton {
-    display: block;
-    margin-bottom: 20px;
-    padding: 8px 15px;
-    background-color: #5cb85c; /* Button Green */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.2s ease;
-}
-
-#homeButton:hover {
-    background-color: #4cae4c;
-}
-
-.recipe-section {
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.recipe-section:last-child {
-     border-bottom: none;
-}
+                 <div class="recipe-section">
+                    <h3>Why You'll Love It</h3>
+                    <p id="recipeDescription"></p>
+                </div>
 
 
-.recipe-section h3 {
-    color: #444;
-    margin-bottom: 10px;
-}
+                <div class="recipe-section">
+                    <h3>Nutrition Estimate* (Per 1 cup / 240ml Serving)</h3>
+                    <table id="nutritionTable">
+                        <thead>
+                            <tr>
+                                <th>Nutrient</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Nutrition data loaded by JavaScript -->
+                        </tbody>
+                    </table>
+                    <p class="disclaimer">
+                        *<strong>Disclaimer:</strong> Nutrition information is an estimate based on the raw ingredients listed for Step 1 & 2 before blending and dilution. Actual values in the final milk will vary based on specific ingredients, appliance efficiency, and potential settling. This table is for informational purposes only.
+                    </p>
+                </div>
 
-#recipeIngredients,
-#recipeFlavorings {
-    list-style: disc;
-    margin-left: 20px;
-    padding-left: 10px; /* Indent list items */
-}
-#recipeIngredients li,
-#recipeFlavorings li {
-    margin-bottom: 5px;
-}
+            </div>
+        </main>
 
+         <footer id="appFooter">
+            <p>© Milk Depot - Make Milk Magic!</p>
+        </footer>
 
-#recipeSteps {
-    margin-left: 20px; /* Indent ordered list */
-    padding-left: 10px;
-}
+    </div>
 
-#recipeSteps li {
-    margin-bottom: 8px;
-    line-height: 1.4;
-}
+    <script src="recipes.js"></script> {/* <<< Data file FIRST */}
+    <script src="app.js"></script>     {/* <<< Logic file SECOND */}
 
-#recipeDescription {
-    line-height: 1.6;
-    text-align: justify;
-}
+    {/* *** FIX: Add inline script to explicitly start the app *** */}
+    <script>
+        // This code runs only AFTER both recipes.js and app.js have been loaded and parsed.
+        if (typeof initializeApp === 'function') {
+            initializeApp(); // Call the function defined in app.js
+        } else {
+            console.error("Initialization function (initializeApp) not found. Check app.js.");
+            // Optionally display an error message to the user here
+             const listElement = document.getElementById('recipeList');
+             if(listElement) {
+                listElement.innerHTML = '<li class="loading-placeholder">Error initializing the app.</li>';
+             }
+        }
+    </script>
+    {/* *** END FIX *** */}
 
-#nutritionTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-#nutritionTable th,
-#nutritionTable td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-#nutritionTable th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-#nutritionTable tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.disclaimer {
-    font-size: 0.8em;
-    color: #777;
-    margin-top: 15px;
-    text-align: center;
-    font-style: italic;
-}
+</body>
+</html>
