@@ -84,10 +84,11 @@
 
     </div>
 
-    {/* *** FIX: Use defer attribute, remove inline script *** */}
-    <script src="recipes.js" defer></script> {/* Load data, execute after parsing */}
-    <script src="app.js" defer></script>     {/* Load logic, execute after recipes.js AND parsing */}
-    {/* *** END FIX *** */}
+    {/* Scripts loaded with defer execute after HTML parsing, in order */}
+    <script src="recipes.js" defer></script> {/* Data file FIRST */}
+    <script src="app.js" defer></script>     {/* Logic file SECOND */}
+
+    {/* NO inline script needed when using defer + DOMContentLoaded correctly */}
 
 </body>
 </html>
