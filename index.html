@@ -36,12 +36,13 @@
                     <h4>Step 1: Base Ingredients</h4>
                     <ul id="recipeIngredients"></ul>
                     <h4>Step 2: Flavor Boosters</h4>
+                    <p>Add the following to the filter basket (adjust to taste):</p>
                     <ul id="recipeFlavorings"></ul>
                 </div>
 
                 <div class="recipe-section">
                     <h3>How to Make It (Using Your Milk Depot!)</h3>
-                    <ol id="recipeSteps" start="3"> <!-- Start numbering at 3 -->
+                    <ol id="recipeSteps" start="3">
                         <li>Attach the filter basket securely to the milk maker top.</li>
                         <li>Fill the pitcher with 1300ml (about 5.5 cups) fresh water and place the milk maker top onto the pitcher.</li>
                         <li>Press the 'Start' button. Go grab a glass!</li>
@@ -82,22 +83,26 @@
 
     </div>
 
-    <script src="recipes.js"></script> {/* <<< Data file FIRST */}
-    <script src="app.js"></script>     {/* <<< Logic file SECOND */}
+    <script src="recipes.js"></script> {/* Data file FIRST */}
+    <script src="app.js"></script>     {/* Logic file SECOND */}
 
-    {/* *** FIX: Add inline script to explicitly start the app *** */}
+    {/* *** FIX: Modify inline script to PASS recipes data *** */}
     <script>
-        // This code runs only AFTER both recipes.js and app.js have been loaded and parsed.
-        if (typeof initializeApp === 'function') {
-            initializeApp(); // Call the function defined in app.js
-        } else {
-            console.error("Initialization function (initializeApp) not found. Check app.js.");
-            // Optionally display an error message to the user here
-             const listElement = document.getElementById('recipeList');
-             if(listElement) {
-                listElement.innerHTML = '<li class="loading-placeholder">Error initializing the app.</li>';
-             }
-        }
+        // Ensure this runs after the DOM is interactive and scripts are likely loaded
+        // Using a small delay can sometimes help in tricky loading scenarios
+        setTimeout(() => {
+            // Check if the recipes variable from recipes.js exists AND the init function exists
+            if (typeof recipes !== 'undefined' && Array.isArray(recipes) && typeof initializeApp === 'function') {
+                 console.log("Found recipes data and initializeApp function. Starting app...");
+                 initializeApp(recipes); // <<< PASS the recipes array as an argument
+            } else {
+                console.error("Initialization failed: Recipes data or initializeApp function not found.");
+                const listElement = document.getElementById('recipeList');
+                if(listElement) {
+                    listElement.innerHTML = '<li class="loading-placeholder">Error initializing the app. Please check console.</li>';
+                }
+            }
+        }, 0); // setTimeout 0 helps push execution to after current script block processing
     </script>
     {/* *** END FIX *** */}
 
