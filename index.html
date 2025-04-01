@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milk Depot Recipes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="appContainer">
+
+        <header id="appHeader">
+            <h1>Milk Depot Recipes</h1>
+            <p class="tagline">Fresh, Filtered, Fantastic Milk - Made by You!</p>
+        </header>
+
+        <main>
+            <!-- Screen 1: Recipe List -->
+            <div id="recipeListScreen">
+                <h2>Choose Your Milk Adventure!</h2>
+                <div class="list-container">
+                    <ul id="recipeList">
+                        <!-- Recipe names loaded by JavaScript -->
+                        <li class="loading-placeholder">Loading recipes...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Screen 2: Recipe Details -->
+            <div id="recipeDetailScreen" class="hidden">
+                <button id="homeButton">&larr; Back to Recipes</button>
+                <h2 id="recipeName">Recipe Name</h2>
+
+                <div class="recipe-section">
+                    <h3>What You'll Need (for the Filter Basket)</h3>
+                    <h4>Step 1: Base Ingredients</h4>
+                    <ul id="recipeIngredients"></ul>
+                    <h4>Step 2: Flavor Boosters</h4>
+                    <ul id="recipeFlavorings"></ul>
+                </div>
+
+                <div class="recipe-section">
+                    <h3>How to Make It (Using Your Milk Depot!)</h3>
+                    <ol id="recipeSteps">
+                        <li>Add <strong>Base Ingredients</strong> (listed above) to the filter basket.</li>
+                        <li>Add <strong>Flavor Boosters</strong> (listed above, if using) to the filter basket.</li>
+                        <li>Attach the filter basket securely to the milk maker top.</li>
+                        <li>Fill the pitcher with 1300ml (about 5.-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+#appHeader h1 {
+    color: #2a7a2a; /* Milk Depot Green */
+}
+
+#recipeListScreen h2,
+#recipeDetailScreen h2 {
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#recipeList {
+    list-style: none;
+    padding: 0;
+    max-height: 70vh; /* Allow scrolling */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+#recipeList li {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#recipeList li:last-child {
+    border-bottom: none;
+}
+
+#recipeList li:hover {
+    background-color: #e9f5e9; /* Light green hover */
+}
+
+.hidden {
+    display: none;
+}
+
+#homeButton {
+    display: block;
+    margin-bottom: 20px;
+    padding: 8px 15px;
+    background-color: #5cb85c; /* Button Green */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+#homeButton:hover {
+    background-color: #4cae4c;
+}
+
+.recipe-section {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.recipe-section:last-child {
+     border-bottom: none;
+}
+
+
+.recipe-section h3 {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+#recipeIngredients,
+#recipeFlavorings {
+    list-style: disc;
+    margin-left: 20px;
+    padding-left: 10px; /* Indent list items */
+}
+#recipeIngredients li,
+#recipeFlavorings li {
+    margin-bottom: 5px;
+}
+
+
+#recipeSteps {
+    margin-left: 20px; /* Indent ordered list */
+    padding-left: 10px;
+}
+
+#recipeSteps li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+#recipeDescription {
+    line-height: 1.6;
+    text-align: justify;
+}
+
+#nutritionTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#nutritionTable th,
+#nutritionTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#nutritionTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#nutritionTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.disclaimer {
+    font-size: 0.8em;
+    color: #777;
+    margin-top: 15px;
+    text-align: center;
+    font-style: italic;
+}
