@@ -1,6 +1,6 @@
 // app.js - Milk Depot Recipes Application Logic
-// *** NOTE: Removed the DOMContentLoaded wrapper ***
-// This code now runs immediately after recipes.js is loaded.
+// *** REMOVED DOMContentLoaded wrapper ***
+// *** ADDED check for 'recipes' variable availability ***
 
 // Get references to major screen elements
 const recipeListScreenEl = document.getElementById('recipeListScreen');
@@ -14,18 +14,32 @@ const ingredientsListEl = document.getElementById('recipeIngredients');
 const flavoringsListEl = document.getElementById('recipeFlavorings');
 const descriptionEl = document.getElementById('recipeDescription');
 const nutritionTableBodyEl = document.getElementById('nutritionTable').querySelector('tbody');
-// Get reference to the paragraph preceding the flavorings list to hide/show it too
-const flavoringsParagraphEl = flavoringsListEl.previousElementSibling;
+const flavoringsParagraphEl = flavoringsListEl.previousElementSibling; // Get the <p> before flavorings
+
+/**
+ * Main initialization function called after scripts load.
+ */
+function initializeApp() {
+    console.log("Initializing app..."); // Log start
+    if (typeof recipes === 'undefined' || !Array.isArray(recipes)) {
+        console.error("Recipes data not found or not an array!");
+        // Display error to user
+        const listElement = document.getElementById('recipeList');
+        if(listElement) {
+            listElement.innerHTML = '<li class="loading-placeholder">Error: Could not load recipes.</li>';
+        }
+        return; // Stop initialization
+    }
+
+    // --- Initialization ---
+    displayRecipeList(); // Populate the list now that we know 'recipes' exists
+
+    // --- Event Listeners ---
+    homeButton.addEventListener('click', showRecipeListScreen);
+}
 
 
-// --- Initialization ---
-// Call displayRecipeList directly, assuming recipes array is now available
-displayRecipeList();
-
-// --- Event Listeners ---
-homeButton.addEventListener('click', showRecipeListScreen);
-
-// --- Functions ---
+// --- Functions --- (displayRecipeList, showRecipeDetailScreen, showRecipeListScreen remain the same as previous correct version)
 
 /**
  * Clears and populates the recipe list screen from the global 'recipes' array.
@@ -33,124 +47,89 @@ homeButton.addEventListener('click', showRecipeListScreen);
 function displayRecipeList() {
     recipeListEl.innerHTML = ''; // Clear placeholder or previous list
 
-    // Check if recipes array exists and has recipes
-    // This check is crucial now that we don't wait for DOMContentLoaded specifically
-    if (typeof recipes === 'undefined' || !Array.isArray(recipes) || recipes.length === 0) {
-         recipeListEl.innerHTML = '<li class="loading-placeholder">Error: Recipes not loaded correctly.</li>';
-         console.error("Recipes array is missing, not an array, or empty!");
+    // Sort recipes alphabetically by name
+    recipes.sort((a, b) => a.name.localeCompare(b.name));
+
+    if (recipes.length === 0) {
+         recipeListEl.innerHTML = '<li class="loading-placeholder">No recipes available.</li>';
          return;
     }
-
-    // Sort recipes alphabetically by name for easier browsing
-    recipes.sort((a, b) => a.name.localeCompare(b.name));
 
     recipes.forEach(recipe => {
         const li = document.createElement('li');
         li.textContent = recipe.name;
-        // Use dataset to store the unique ID for easy retrieval on click
-        li.dataset.recipeId = recipe.id;
-        li.addEventListener('click', () => showRecipeDetailScreen(recipe.id)); // Add click handler
+        li.dataset.recipeId = recipe.id; // Store the unique ID
+        li.addEventListener('click', () => showRecipeDetailScreen(recipe.id));
         recipeListEl.appendChild(li);
     });
 }
 
 /**
- * Finds a recipe by ID and populates the detail screen with its data.
+ * Finds a recipe by ID and populates the detail screen.
  * @param {string} recipeId - The unique ID of the recipe to display.
  */
 function showRecipeDetailScreen(recipeId) {
-    // Find the specific recipe object from the global 'recipes' array
     const recipe = recipes.find(r => r.id === recipeId);
     if (!recipe) {
         console.error("Recipe not found for ID:", recipeId);
-        return; // Exit if recipe isn't found
+        return;
     }
 
     // Populate Header
     recipeNameEl.textContent = recipe.name;
 
     // Populate Ingredients (Step 1)
-    ingredientsListEl.innerHTML = ''; // Clear previous ingredients
+    ingredientsListEl.innerHTML = '';
     if (recipe.ingredients && recipe.ingredients.length > 0) {
         recipe.ingredients.forEach(ing => {
-            const li = document.createElement('li');
-            li.textContent = ing;
-            ingredientsListEl.appendChild(li);
+            const li = document.createElement('li'); li.textContent = ing; ingredientsListEl.appendChild(li);
         });
-    } else {
-        ingredientsListEl.innerHTML = '<li>Base ingredients not specified.</li>'; // Placeholder
-    }
-
+    } else { ingredientsListEl.innerHTML = '<li>Base ingredients not specified.</li>'; }
 
     // Populate Flavorings (Step 2)
-    flavoringsListEl.innerHTML = ''; // Clear previous flavorings
-    // Check if flavorings exist and the array is not empty
+    flavoringsListEl.innerHTML = '';
     if (recipe.flavorings && recipe.flavorings.length > 0) {
-         flavoringsListEl.style.display = 'block'; // Show the <ul>
-         if(flavoringsParagraphEl) flavoringsParagraphEl.style.display = 'block'; // Show the <p> tag before it
+         flavoringsListEl.style.display = 'block'; if(flavoringsParagraphEl) flavoringsParagraphEl.style.display = 'block';
          recipe.flavorings.forEach(flav => {
-            const li = document.createElement('li');
-            li.textContent = flav;
-            flavoringsListEl.appendChild(li);
-        });
+            const li = document.createElement('li'); li.textContent = flav; flavoringsListEl.appendChild(li);
+         });
     } else {
-        // Hide the list and the preceding paragraph if no flavorings
-        flavoringsListEl.style.display = 'none';
-         if(flavoringsParagraphEl) flavoringsParagraphEl.style.display = 'none';
+        flavoringsListEl.style.display = 'none'; if(flavoringsParagraphEl) flavoringsParagraphEl.style.display = 'none';
     }
 
     // Populate Description
-    // Use innerHTML to render line breaks (\n -> <br>) correctly
     descriptionEl.innerHTML = recipe.description ? recipe.description.replace(/\n/g, '<br>') : "No description available.";
 
     // Populate Nutrition Table
-    nutritionTableBodyEl.innerHTML = ''; // Clear previous rows
+    nutritionTableBodyEl.innerHTML = '';
     if (recipe.nutrition && Object.keys(recipe.nutrition).length > 0) {
-        // Iterate through each nutrient in the recipe's nutrition object
         for (const [key, value] of Object.entries(recipe.nutrition)) {
              const row = nutritionTableBodyEl.insertRow();
-             const nutrientCell = row.insertCell();
-             const amountCell = row.insertCell();
-
-             // Format nutrient names nicely (e.g., "saturated_fat_g" -> "Saturated fat")
-             let nutrientName = key.replace(/_mg|_iu|_g|_mcg/g, '').replace(/_/g, ' '); // Remove units, replace underscore
+             const nutrientCell = row.insertCell(); const amountCell = row.insertCell();
+             let nutrientName = key.replace(/_mg|_iu|_g|_mcg/g, '').replace(/_/g, ' ');
              nutrientName = nutrientName.charAt(0).toUpperCase() + nutrientName.slice(1);
              nutrientCell.textContent = nutrientName;
-
-             // Determine and append units based on common key naming patterns
              let unit = '';
-             if (key === 'calories') unit = ' kcal';
-             else if (key.endsWith('_g')) unit = ' g'; // Assumes keys end with _g for grams
-             else if (key.endsWith('_mg')) unit = ' mg';// Assumes keys end with _mg for milligrams
-             else if (key.endsWith('_iu')) unit = ' IU'; // Assumes keys end with _iu for International Units
-             else if (key.endsWith('_mcg')) unit = ' mcg';// Assumes keys end with _mcg for micrograms
-
-             // Display value and unit, or '-' if value is missing/null
+             if (key === 'calories') unit = ' kcal'; else if (key.endsWith('_g')) unit = ' g'; else if (key.endsWith('_mg')) unit = ' mg'; else if (key.endsWith('_iu')) unit = ' IU'; else if (key.endsWith('_mcg')) unit = ' mcg';
              amountCell.textContent = (value !== null && value !== undefined) ? value + unit : '-';
         }
     } else {
-         // Display a message if no nutrition data exists for this recipe
-         const row = nutritionTableBodyEl.insertRow();
-         const cell = row.insertCell();
-         cell.colSpan = 2; // Make the cell span both columns
-         cell.textContent = "Estimated nutrition data not available.";
-         cell.style.textAlign = "center";
-         cell.style.fontStyle = "italic";
-         cell.style.color = "#666";
+         const row = nutritionTableBodyEl.insertRow(); const cell = row.insertCell(); cell.colSpan = 2;
+         cell.textContent = "Estimated nutrition data not available."; cell.style.textAlign = "center"; cell.style.fontStyle = "italic"; cell.style.color = "#666";
     }
 
     // Switch Visible Screens
-    recipeListScreenEl.classList.add('hidden');    // Hide the list screen
-    recipeDetailScreenEl.classList.remove('hidden'); // Show the detail screen
-    window.scrollTo(0, 0); // Scroll to the top of the page to see the recipe details
+    recipeListScreenEl.classList.add('hidden');
+    recipeDetailScreenEl.classList.remove('hidden');
+    window.scrollTo(0, 0);
 }
 
 /**
  * Hides the detail screen and shows the recipe list screen.
  */
 function showRecipeListScreen() {
-    recipeDetailScreenEl.classList.add('hidden'); // Hide details
-    recipeListScreenEl.classList.remove('hidden'); // Show list
+    recipeDetailScreenEl.classList.add('hidden');
+    recipeListScreenEl.classList.remove('hidden');
 }
 
-// End of app.js script
+// Note: No DOMContentLoaded wrapper, initializeApp will be called explicitly from HTML
